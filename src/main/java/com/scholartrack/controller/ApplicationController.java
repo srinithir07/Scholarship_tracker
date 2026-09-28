@@ -1,19 +1,14 @@
 package com.scholartrack.controller;
 
 import com.scholartrack.dto.ApplicationRequest;
-import com.scholartrack.dto.ApplicationResponse;
-import com.scholartrack.entity.ApplicationStatus;
+import com.scholartrack.dto.ApplicationStatusResponse;
+import com.scholartrack.dto.DisbursementUpdateRequest;
+import com.scholartrack.entity.Application;
 import com.scholartrack.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,39 +22,33 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApplicationResponse apply(@Valid @RequestBody ApplicationRequest request) {
-        return applicationService.apply(request);
-    }
-
     @GetMapping
-    public List<ApplicationResponse> findAll() {
-        return applicationService.findAll();
+    public ResponseEntity<List<Application>> getAllApplications() {
+        return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
     @GetMapping("/{id}")
-    public ApplicationResponse findById(@PathVariable Long id) {
-        return applicationService.findById(id);
+    public ResponseEntity<Application> getApplicationById(@PathVariable Long id) {
+        return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
-    @GetMapping("/student/{studentId}")
-    public List<ApplicationResponse> findByStudent(@PathVariable Long studentId) {
-        return applicationService.findByStudent(studentId);
+    @PostMapping
+    public ResponseEntity<Application> applyForScholarship(@Valid @RequestBody ApplicationRequest request) {
+        Application created = applicationService.applyForScholarship(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @GetMapping("/status/{status}")
-    public List<ApplicationResponse> findByStatus(@PathVariable ApplicationStatus status) {
-        return applicationService.findByStatus(status);
+    @PutMapping("/{id}/disbursement")
+    public ResponseEntity<Application> updateDisbursementStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody DisbursementUpdateRequest request) {
+        Application updated = applicationService.updateDisbursementStatus(id, request);
+        return ResponseEntity.ok(updated);
     }
 
-    @PutMapping("/{id}/review")
-    public ApplicationResponse startReview(@PathVariable Long id) {
-        return applicationService.startReview(id);
-    }
-
-    @PutMapping("/{id}/disburse")
-    public ApplicationResponse disburse(@PathVariable Long id) {
-        return applicationService.disburse(id);
+    @GetMapping("/{id}/status")
+    public ResponseEntity<ApplicationStatusResponse> getApplicationStatus(@PathVariable Long id) {
+        ApplicationStatusResponse response = applicationService.getApplicationStatus(id);
+        return ResponseEntity.ok(response);
     }
 }

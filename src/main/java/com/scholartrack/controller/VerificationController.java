@@ -1,19 +1,12 @@
 package com.scholartrack.controller;
 
 import com.scholartrack.dto.VerificationRequest;
-import com.scholartrack.dto.VerificationResponse;
-import com.scholartrack.dto.VerificationUpdateRequest;
+import com.scholartrack.entity.Verification;
 import com.scholartrack.service.VerificationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,25 +20,27 @@ public class VerificationController {
         this.verificationService = verificationService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public VerificationResponse create(@Valid @RequestBody VerificationRequest request) {
-        return verificationService.create(request);
-    }
-
     @GetMapping
-    public List<VerificationResponse> findAll() {
-        return verificationService.findAll();
+    public ResponseEntity<List<Verification>> getAllVerifications() {
+        return ResponseEntity.ok(verificationService.getAllVerifications());
     }
 
     @GetMapping("/{id}")
-    public VerificationResponse findById(@PathVariable Long id) {
-        return verificationService.findById(id);
+    public ResponseEntity<Verification> getVerificationById(@PathVariable Long id) {
+        return ResponseEntity.ok(verificationService.getVerificationById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Verification> createVerification(@Valid @RequestBody VerificationRequest request) {
+        Verification created = verificationService.createVerification(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public VerificationResponse update(@PathVariable Long id,
-                                       @Valid @RequestBody VerificationUpdateRequest request) {
-        return verificationService.update(id, request);
+    public ResponseEntity<Verification> updateVerification(
+            @PathVariable Long id,
+            @Valid @RequestBody VerificationRequest request) {
+        Verification updated = verificationService.updateVerification(id, request);
+        return ResponseEntity.ok(updated);
     }
 }

@@ -1,5 +1,6 @@
 package com.scholartrack.entity;
 
 public enum EligibilityStatus {
-    ELIGIBLE, INELIGIBLE
+    ELIGIBLE,
+    NOT_ELIGIBLE
 }

@@ -1,5 +1,7 @@
 package com.scholartrack.entity;
 
 public enum VerificationStatus {
-    PENDING, APPROVED, REJECTED
+    PENDING,
+    APPROVED,
+    REJECTED
 }

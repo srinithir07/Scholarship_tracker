@@ -1,16 +1,9 @@
 package com.scholartrack.repository;
 
 import com.scholartrack.entity.Scheme;
-import com.scholartrack.entity.SchemeStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface SchemeRepository extends JpaRepository<Scheme, Long> {
-
-    List<Scheme> findByStatusOrderByIdAsc(SchemeStatus status);
-
-    boolean existsByNameIgnoreCase(String name);
-
-    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
 }

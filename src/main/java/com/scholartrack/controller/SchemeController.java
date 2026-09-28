@@ -1,19 +1,11 @@
 package com.scholartrack.controller;
 
-import com.scholartrack.dto.SchemeRequest;
 import com.scholartrack.entity.Scheme;
 import com.scholartrack.service.SchemeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,35 +19,31 @@ public class SchemeController {
         this.schemeService = schemeService;
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Scheme create(@Valid @RequestBody SchemeRequest request) {
-        return schemeService.create(request);
-    }
-
     @GetMapping
-    public List<Scheme> findAll() {
-        return schemeService.findAll();
-    }
-
-    @GetMapping("/active")
-    public List<Scheme> findActive() {
-        return schemeService.findActive();
+    public ResponseEntity<List<Scheme>> getAllSchemes() {
+        return ResponseEntity.ok(schemeService.getAllSchemes());
     }
 
     @GetMapping("/{id}")
-    public Scheme findById(@PathVariable Long id) {
-        return schemeService.findById(id);
+    public ResponseEntity<Scheme> getSchemeById(@PathVariable Long id) {
+        return ResponseEntity.ok(schemeService.getSchemeById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Scheme> createScheme(@Valid @RequestBody Scheme scheme) {
+        Scheme created = schemeService.createScheme(scheme);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Scheme update(@PathVariable Long id, @Valid @RequestBody SchemeRequest request) {
-        return schemeService.update(id, request);
+    public ResponseEntity<Scheme> updateScheme(@PathVariable Long id, @Valid @RequestBody Scheme scheme) {
+        Scheme updated = schemeService.updateScheme(id, scheme);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        schemeService.delete(id);
+    public ResponseEntity<Void> deleteScheme(@PathVariable Long id) {
+        schemeService.deleteScheme(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,19 +1,7 @@
 package com.scholartrack.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "students")
@@ -23,59 +11,119 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Name cannot be empty")
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Email must be valid")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20)
+    @NotBlank(message = "Phone cannot be empty")
     private String phone;
 
-    @Column(name = "annual_income", nullable = false, precision = 14, scale = 2)
-    private BigDecimal annualIncome;
+    @NotNull(message = "Marks cannot be null")
+    @PositiveOrZero(message = "Marks cannot be negative")
+    @Max(value = 100, message = "Marks cannot exceed 100")
+    private Double marks;
 
-    @Column(nullable = false, precision = 5, scale = 2)
-    private BigDecimal marks;
+    @NotNull(message = "Annual income cannot be null")
+    @PositiveOrZero(message = "Annual income cannot be negative")
+    private Double annualIncome;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Course cannot be empty")
     private String course;
 
-    @Column(name = "study_year", nullable = false)
-    private Integer year;
+    @NotBlank(message = "College cannot be empty")
+    private String college;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "student")
-    private List<Application> applications = new ArrayList<>();
-
-    @PrePersist
-    void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    public Student() {
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public BigDecimal getAnnualIncome() { return annualIncome; }
-    public void setAnnualIncome(BigDecimal annualIncome) { this.annualIncome = annualIncome; }
-    public BigDecimal getMarks() { return marks; }
-    public void setMarks(BigDecimal marks) { this.marks = marks; }
-    public String getCourse() { return course; }
-    public void setCourse(String course) { this.course = course; }
-    public Integer getYear() { return year; }
-    public void setYear(Integer year) { this.year = year; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public List<Application> getApplications() { return applications; }
-    public void setApplications(List<Application> applications) { this.applications = applications; }
+    public Student(Long id, String name, String email, String phone, Double marks, Double annualIncome, String course, String college) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.marks = marks;
+        this.annualIncome = annualIncome;
+        this.course = course;
+        this.college = college;
+    }
+
+    public Student(String name, String email, String phone, Double marks, Double annualIncome, String course, String college) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.marks = marks;
+        this.annualIncome = annualIncome;
+        this.course = course;
+        this.college = college;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Double getMarks() {
+        return marks;
+    }
+
+    public void setMarks(Double marks) {
+        this.marks = marks;
+    }
+
+    public Double getAnnualIncome() {
+        return annualIncome;
+    }
+
+    public void setAnnualIncome(Double annualIncome) {
+        this.annualIncome = annualIncome;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
 }

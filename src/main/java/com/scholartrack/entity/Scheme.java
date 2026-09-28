@@ -1,21 +1,7 @@
 package com.scholartrack.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "schemes")
@@ -25,50 +11,92 @@ public class Scheme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @NotBlank(message = "Scheme name cannot be empty")
+    @Column(nullable = false)
     private String name;
 
+    @NotBlank(message = "Description cannot be empty")
     @Column(length = 1000)
     private String description;
 
-    @Column(name = "income_limit", nullable = false, precision = 14, scale = 2)
-    private BigDecimal incomeLimit;
+    @NotNull(message = "Income limit cannot be null")
+    @Positive(message = "Income limit must be positive")
+    private Double incomeLimit;
 
-    @Column(name = "minimum_marks", nullable = false, precision = 5, scale = 2)
-    private BigDecimal minimumMarks;
+    @NotNull(message = "Minimum marks cannot be null")
+    @Min(value = 0, message = "Minimum marks cannot be less than 0")
+    @Max(value = 100, message = "Minimum marks cannot exceed 100")
+    private Double minimumMarks;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private SchemeStatus status = SchemeStatus.ACTIVE;
+    @NotBlank(message = "Status cannot be empty")
+    private String status = "ACTIVE";
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "scheme")
-    private List<Application> applications = new ArrayList<>();
-
-    @PrePersist
-    void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    public Scheme() {
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public BigDecimal getIncomeLimit() { return incomeLimit; }
-    public void setIncomeLimit(BigDecimal incomeLimit) { this.incomeLimit = incomeLimit; }
-    public BigDecimal getMinimumMarks() { return minimumMarks; }
-    public void setMinimumMarks(BigDecimal minimumMarks) { this.minimumMarks = minimumMarks; }
-    public SchemeStatus getStatus() { return status; }
-    public void setStatus(SchemeStatus status) { this.status = status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public List<Application> getApplications() { return applications; }
-    public void setApplications(List<Application> applications) { this.applications = applications; }
+    public Scheme(Long id, String name, String description, Double incomeLimit, Double minimumMarks, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.incomeLimit = incomeLimit;
+        this.minimumMarks = minimumMarks;
+        this.status = status;
+    }
+
+    public Scheme(String name, String description, Double incomeLimit, Double minimumMarks, String status) {
+        this.name = name;
+        this.description = description;
+        this.incomeLimit = incomeLimit;
+        this.minimumMarks = minimumMarks;
+        this.status = status;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getIncomeLimit() {
+        return incomeLimit;
+    }
+
+    public void setIncomeLimit(Double incomeLimit) {
+        this.incomeLimit = incomeLimit;
+    }
+
+    public Double getMinimumMarks() {
+        return minimumMarks;
+    }
+
+    public void setMinimumMarks(Double minimumMarks) {
+        this.minimumMarks = minimumMarks;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -1,10 +1,17 @@
 target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes/META-INF/MANIFEST.MF
+
+# IDE files
 .idea/
-*.iml
 *.iws
-.vscode/
+*.iml
+*.ipr
 .classpath
 .project
 .settings/
-*.log
+bin/
+
+# OS generated files
 .DS_Store
+Thumbs.db
