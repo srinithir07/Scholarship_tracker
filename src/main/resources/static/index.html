@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ScholarTrack — Scholarship Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <span class="brand-mark">ST</span>
+            <div>
+                <strong>ScholarTrack</strong>
+                <small>Scholarship Management</small>
+            </div>
+        </div>
+        <nav class="nav">
+            <a href="#dashboard" class="nav-link" data-view="dashboard"><span class="nav-ico">&#9632;</span>Dashboard</a>
+            <a href="#students" class="nav-link" data-view="students"><span class="nav-ico">&#9679;</span>Students</a>
+            <a href="#schemes" class="nav-link" data-view="schemes"><span class="nav-ico">&#9670;</span>Scholarship Schemes</a>
+            <a href="#applications" class="nav-link" data-view="applications"><span class="nav-ico">&#9650;</span>Applications</a>
+            <a href="#verification" class="nav-link" data-view="verification"><span class="nav-ico">&#10003;</span>Verification</a>
+        </nav>
+        <div class="sidebar-foot">
+            <div>Eligibility is checked automatically on every application.</div>
+        </div>
+    </aside>
+
+    <!-- ===== Main ===== -->
+    <div class="main">
+        <header class="topbar">
+            <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">&#9776;</button>
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="topbar-actions">
+                <span class="live" id="liveIndicator"><span class="dot"></span><span id="liveText">Connecting…</span></span>
+                <button class="btn btn-ghost" id="refreshBtn" type="button">Refresh</button>
+            </div>
+        </header>
+
+        <main class="content">
+
+            <!-- Dashboard -->
+            <section class="view" id="view-dashboard">
+                <div class="stats-grid" id="statsGrid"></div>
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Recent Applications</h2>
+                        <a href="#applications" class="link">View all</a>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Application ID</th><th>Student</th><th>Scholarship</th><th>Eligibility</th>
+                                <th>Application Status</th><th>Verification</th><th>Date</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="recentBody"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Students -->
+            <section class="view" id="view-students">
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Students</h2>
+                        <button class="btn btn-primary" type="button" data-action="add-student">+ Add Student</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Annual Income</th>
+                                <th>Marks</th><th>Course</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="studentsBody"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schemes -->
+            <section class="view" id="view-schemes">
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Scholarship Schemes</h2>
+                        <button class="btn btn-primary" type="button" data-action="add-scheme">+ Add Scheme</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID</th><th>Scheme</th><th>Income Limit</th><th>Minimum Marks</th>
+                                <th>Status</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="schemesBody"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Applications -->
+            <section class="view" id="view-applications">
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Applications <span class="muted small">— status updates automatically every 10 seconds</span></h2>
+                        <button class="btn btn-primary" type="button" data-action="apply">+ Apply for Scholarship</button>
+                    </div>
+                    <div class="filters">
+                        <label>Student
+                            <select id="filterStudent"><option value="">All students</option></select>
+                        </label>
+                        <label>Status
+                            <select id="filterStatus">
+                                <option value="">All statuses</option>
+                                <option value="SUBMITTED">Submitted</option>
+                                <option value="UNDER_REVIEW">Under review</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="DISBURSEMENT_PENDING">Disbursement pending</option>
+                                <option value="DISBURSED">Disbursed</option>
+                            </select>
+                        </label>
+                        <label>Eligibility
+                            <select id="filterEligibility">
+                                <option value="">All</option>
+                                <option value="ELIGIBLE">Eligible</option>
+                                <option value="INELIGIBLE">Ineligible</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Application ID</th><th>Student</th><th>Scholarship</th><th>Eligibility</th>
+                                <th>Application Status</th><th>Verification</th><th>Date</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="applicationsBody"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification -->
+            <section class="view" id="view-verification">
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Verification</h2>
+                        <button class="btn btn-primary" type="button" data-action="new-review">Review Application</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>ID</th><th>Application</th><th>Student</th><th>Scholarship</th><th>Verified By</th>
+                                <th>Decision</th><th>Date</th><th>Remarks</th><th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="verificationsBody"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- ===== Dialogs ===== -->
+<dialog id="studentDialog">
+    <form id="studentForm" novalidate>
+        <h3>Add Student</h3>
+        <div class="form-error" hidden></div>
+        <div class="form-grid">
+            <label class="full">Full name<input name="name" type="text" maxlength="100" required></label>
+            <label>Email<input name="email" type="email" maxlength="150" required></label>
+            <label>Phone<input name="phone" type="text" inputmode="numeric" placeholder="10 digits" required></label>
+            <label>Annual income (₹)<input name="annualIncome" type="number" min="0" step="1" required></label>
+            <label>Marks (0–100)<input name="marks" type="number" min="0" max="100" step="0.01" required></label>
+            <label>Course<input name="course" type="text" maxlength="100" required></label>
+            <label>Year (1–6)<input name="year" type="number" min="1" max="6" step="1" required></label>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Student</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="schemeDialog">
+    <form id="schemeForm" novalidate>
+        <h3>Add Scholarship Scheme</h3>
+        <div class="form-error" hidden></div>
+        <div class="form-grid">
+            <label class="full">Scheme name<input name="name" type="text" maxlength="150" required></label>
+            <label class="full">Description<textarea name="description" rows="3" maxlength="1000"></textarea></label>
+            <label>Income limit (₹)<input name="incomeLimit" type="number" min="1" step="1" required></label>
+            <label>Minimum marks<input name="minimumMarks" type="number" min="0" max="100" step="0.01" required></label>
+            <label>Status
+                <select name="status"><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select>
+            </label>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Scheme</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="applyDialog">
+    <form id="applyForm" novalidate>
+        <h3>Apply for Scholarship</h3>
+        <p class="muted small">Eligibility (income limit and minimum marks) is checked automatically on submission.</p>
+        <div class="form-error" hidden></div>
+        <div class="form-grid">
+            <label class="full">Student<select name="studentId" id="applyStudent" required></select></label>
+            <label class="full">Scholarship scheme<select name="schemeId" id="applyScheme" required></select></label>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="reviewDialog">
+    <form id="reviewForm" novalidate>
+        <h3 id="reviewTitle">Review Application</h3>
+        <p class="muted small">Only applications that are UNDER REVIEW can be verified. Use “Start Review” on an eligible application first.</p>
+        <div class="form-error" hidden></div>
+        <input type="hidden" name="verificationId">
+        <div class="form-grid">
+            <label class="full">Application<select name="applicationId" id="reviewApplication" required></select></label>
+            <label>Verified by<input name="verifiedBy" type="text" maxlength="100" required></label>
+            <label>Decision
+                <select name="status" required>
+                    <option value="APPROVED">Approve</option>
+                    <option value="REJECTED">Reject</option>
+                </select>
+            </label>
+            <label class="full">Remarks<textarea name="remarks" rows="3" maxlength="1000"></textarea></label>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Decision</button>
+        </div>
+    </form>
+</dialog>
+
+<script src="js/app.js"></script>
+</body>
+</html>
