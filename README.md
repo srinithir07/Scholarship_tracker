@@ -54,13 +54,13 @@ scholartrack/
 
 | Tool | Version |
 |------|---------|
-| JDK | 17 or 21 (LTS) |
+| JDK | 21 (LTS) |
 | IntelliJ IDEA | Community or Ultimate (bundles Maven) |
 | XAMPP | any recent version (provides MySQL/MariaDB on port 3306) |
 | Postman | optional, for API testing |
 
 ### Install Java
-1. Download a JDK 17 or 21 (for example Eclipse Temurin from https://adoptium.net).
+1. Download a JDK  21 (for example Eclipse Temurin from https://adoptium.net).
 2. Install it and verify in a terminal: `java -version`.
 
 ### Install / use IntelliJ IDEA
